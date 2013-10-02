@@ -1,4 +1,4 @@
-dial.js
-=======
+dialog.js
+=====
 
-quasi modal alert-, confirm- and prompt dialogs in JavaScript
+js alert-, confirm- and prompt dialogs. ie7+

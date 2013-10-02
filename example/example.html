@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>example</title>
+  <link rel="stylesheet" href="../build/dial.css">
+  <style type="text/css">
+    body {
+      font-family: Verdana, Arial, Sans-serif;
+    }
+    .warning h2 {
+      color: #b11;
+    }
+  </style>
+</head>
+
+<body id="body">
+
+  <h1>js dialog examples</h1>
+
+
+  <h3>Alert</h3>
+  <button onclick="dial.alert('Thin ice!')">note</button>
+  <button onclick="dial.alert({noESC: true, msg: 'VERY thin ice!', heading: 'Yo man', cssClass: 'warning'})">another note</button>
+
+
+  <h3>Confirm</h3>
+  <button
+    onclick="dial.confirm({focus: 'no', msg: 'Going to San Francisco?<p>Will you be wearing some flowers in your hair?</p>'}, function (a) {a || dial.alert('Ok then :(');})">
+    dresscode
+  </button>
+  <button onclick="dial.confirm({msg:'Going bananas?<p>Is that really so?</p>'})">mental state</button>
+
+
+  <h3>Prompt</h3>
+  <button onclick="dial.prompt({focus: 'ok', 'msg': 'Yer name?', 'value': 'Don Martin'}, function (name) {console.log(name); if (!name) {return false;}})">Who goes there? (mandatory)</button>
+  <button onclick="dial.prompt({msg: 'Shoe size?'}, function (a) {console.log(a);})">Shoe size?</button>
+
+
+  <script src="../build/dial.js"></script>
+
+
+</body>
+</html>
