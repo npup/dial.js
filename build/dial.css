@@ -1,0 +1,91 @@
+.js-dial-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  z-index: 10000001;
+}
+.js-dial-wrap {
+  text-align: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10000001;
+}
+.js-dial-wrap:before {
+  content: '';
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: -0.25em;
+}
+.js-dial {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+
+/* appearance */
+.js-dial, .js-dial * {
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+.js-dial-overlay {
+  background-color: #000;
+  opacity: .7;
+}
+.js-dial-wrap:before {
+  height: 80%; /* center of your content will be at HALF of this percentage */
+}
+.js-dial {
+  font-family: Verdana, Arial, Sans-serif;
+  text-align: left;
+  min-width: 22em;
+  max-width: 80%;
+  padding: 1em;
+  border: 2px solid #999;
+  border-radius: 4px;
+  background-color: #e7e7e7;
+  box-shadow: .5em .5em 1em #000;
+}
+
+.js-dial > *:first-child {
+  margin-top: 0;
+}
+
+/* all inputs */
+.js-dial input {
+  padding: 3px 5px;
+  background-color: #f0f0f0;
+  border: 1px solid #999;
+  text-align: center;
+  width: 100%;
+  margin-bottom: .5em;
+  height: 2.5em;
+  border-radius: 3px;
+}
+.js-dial input:focus {
+  border-color: #ea3;
+  border-width: 2px;
+  outline: 0;
+}
+.js-dial input[type=submit] {
+  background-color: #fff;
+}
+
+
+/* prompt-dialog */
+.js-dial-prompt input[type="text"] {
+  display: block;
+}
+.js-dial-confirm input[type=submit]
+, .js-dial-prompt input[type=submit] {
+  width: 49%;
+}
+
+
+.js-dial-alert {
+  min-width: 200px;
+}
