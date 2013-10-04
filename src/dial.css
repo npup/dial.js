@@ -36,6 +36,12 @@
   background-color: #000;
   opacity: .7;
 }
+.js-dial-overlay {
+  /* IE 8 */
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=70)";
+  /* IE 5-7 */
+  filter: alpha(opacity=70);
+}
 .js-dial-wrap:before {
   height: 80%; /* center of your content will be at HALF of this percentage */
 }
