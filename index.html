@@ -4,41 +4,153 @@
   <meta charset="utf-8">
   <title>dial.js examples</title>
   <link rel="stylesheet" href="./build/dial.css">
+  <meta name="description" content="Configurable alert-, confirm- and prompt dialogs with JavaScript and CSS. Small code size. Supports IE7+. No dependencies.">
+  <meta name="keywords" content="js css dialog alert confirm prompt javascript small">
+  <meta name="robots" content="index, follow">
+  <meta name="copyright" content="Petter Envall 2013, MIT license">
+  <meta name="language" content="EN">
+  <meta name="author" content="Petter Envall">
+  <meta name="creationdate" content="2013-09-30">
+  <link rel="stylesheet" href="./build/dial.css">
   <style type="text/css">
-    body {
-      font-family: Verdana, Arial, Sans-serif;
-    }
     .warning h2 {
       color: #b11;
+    }
+
+    button {
+      padding: .3em;
+      border: 1px solid #b8b8b8;
+      background-color: #f0f0f0;
+      border-radius: 4px;
+    }
+    script.example {
+      display: block;
+      font-family: Courier;
+      background-color: #fcfcfc;
+      margin: .5em 0 3em;
+      padding: .5em;
+      overflow: auto;
+      font-size: .8em;
+      border: 2px solid #e8e8e8;
+    }
+
+    button + p {
+      font-size: .8em;
+      color: #444;
+      font-style: italic;
+    }
+
+    body {
+      background-color: #6e7eae;
+      font-family: Verdana, Arial, Sans-serif;
+    }
+    #wrap {
+      width: 620px;
+      margin: 3em auto;
+      position: relative;
+      background-color: #f9f9f9;
+      padding: 1em;
+      border-radius: 4px;
+      min-height: 40em;
+    }
+    #wrap a {
+      color: #139;
+    }
+    h1 {
+      text-align: center;
+      width: 80%;
+      margin: .5em auto;
+    }
+    p {
+      color: #111;
+    }
+    p.expl {
+      font-weight: bold;
+      margin-top: 2em;
     }
   </style>
 </head>
 
 <body id="body">
 
-  <h1>dial.js examples</h1>
+  <div id="wrap">
+
+    <h1>dial.js examples</h1>
+
+    <h3>Alert</h3>
+    <button onclick='dial.alert("Thin ice!")'>
+      note
+    </button>
+    <p>
+      Basic alert.
+    </p>
+    <script class="example">
+      // dial.alert("Thin ice!");
+    </script>
+
+    <button onclick='dial.alert({"heading": "Yo man", "msg": "VERY thin ice!", "cssClass": "warning", "noESC": true});' class="example">
+      another note
+    </button>
+    <p>
+      Alert with additional heading, custom extra CSS class and no closing by pressing <strong>ESC</strong> key.
+    </p>
+    <script class="example">
+      // dial.alert({"heading": "Yo man", "msg": "VERY thin ice!", "cssClass": "warning", "noESC": true});
+    </script>
 
 
-  <h3>Alert</h3>
-  <button onclick="dial.alert('Thin ice!')">note</button>
-  <button onclick="dial.alert({noESC: true, msg: 'VERY thin ice!', heading: 'Yo man', cssClass: 'warning'})">another note</button>
+
+    <h3>Confirm</h3>
+    <button onclick='dial.confirm({"msg": "Going bananas?<p>Is that really so?</p>"}, function (bananas) {bananas && dial.alert("Vaya con bananas!");});'>
+      mental state
+    </button>
+    <p>
+      Basic confirm dialog with a handler for the answer (which is true/false).
+    </p>
+    <script class="example">
+      // dial.confirm({"msg": "Going bananas?<p>Is that really so?</p>"}, function (bananas) {bananas && dial.alert("Vaya con bananas!");});
+    </script>
 
 
-  <h3>Confirm</h3>
-  <button
-    onclick="dial.confirm({focus: 'no', msg: 'Going to San Francisco?<p>Will you be wearing some flowers in your hair?</p>'}, function (a) {a || dial.alert('Ok then :(');})">
-    dresscode
-  </button>
-  <button onclick="dial.confirm({msg:'Going bananas?<p>Is that really so?</p>'})">mental state</button>
+    <button
+      onclick='dial.confirm({"msg": "Going to San Francisco?<p>Will you be wearing some flowers in your hair?</p>", "focus": "no"}, function (flowers) {flowers || dial.alert("Ok then :(");});'>
+      dresscode
+    </button>
+     <p>
+      Confirm dialog with default focus set to &quot;no&quot; alternative, and a handler for the answer (which is true/false).
+    </p>
+    <script class="example">
+      // dial.confirm({"msg": "Going to San Francisco?<p>Will you be wearing some flowers in your hair?</p>", "focus": "no"}, function (flowers) {flowers || dial.alert("Ok then :(");});
+    </script>
 
 
-  <h3>Prompt</h3>
-  <button onclick="dial.prompt({focus: 'ok', 'msg': 'Yer name?', 'value': 'Don Martin'}, function (name) {console.log(name); if (!name) {return false;}})">Who goes there? (mandatory)</button>
-  <button onclick="dial.prompt({msg: 'Shoe size?'}, function (a) {console.log(a);})">Shoe size?</button>
+    <h3>Prompt</h3>
+    <button onclick='dial.prompt({"msg": "Shoe size?"}, function (a) {console.log(a);});'>
+      Shoe size?
+    </button>
+    <p>
+      Prompt dialog with a handler for the answer (which is null, or whatever was entered in the text field).
+    </p>
+    <script class="example">
+      // dial.prompt({"msg": "Shoe size?"}, function (a) {console.log(a);});
+    </script>
+    <button onclick='dial.prompt({"msg": "Yer name?", "value": "Don Martin", "focus": "ok"}, function (name) {console.log(name); if (!name) {return false;}});'>
+      Who goes there? (mandatory)
+    </button>
+    <p>
+      Prompt dialog with a handler for the answer that prevents closing the dialog on null (<strong>cancel</strong>) or empty string as answer.
+    </p>
+    <script class="example">
+      // dial.prompt({"msg": "Yer name?" "value": "Don Martin", "focus": "ok",}, function (name) {console.log(name); if (!name) {return false;}});
+    </script>
 
+
+  </div>
 
   <script src="./build/dial.js"></script>
-
+  <script>
+    ("undefined" == window.console) && (window.console = {"log": function () {}});
+  </script>
 
 </body>
 </html>
