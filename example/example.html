@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <title>dial.js examples</title>
   <link rel="stylesheet" href="./build/dial.css">
-  <meta name="description" content="Configurable alert-, confirm- and prompt dialogs with JavaScript and CSS. Small code size. Supports IE7+. No dependencies.">
+  <meta name="description" content="Configurable alert-, confirm- and prompt dialogs with JavaScript and CSS. Small code size. Supports IE8+. No dependencies.">
   <meta name="keywords" content="js css dialog alert confirm prompt javascript small">
   <meta name="robots" content="index, follow">
   <meta name="copyright" content="Petter Envall 2013, MIT license">
@@ -149,7 +149,7 @@
 
   <script src="../build/dial.js"></script>
   <script>
-    ("undefined" == window.console) && (window.console = {"log": function () {}});
+    ("undefined" == typeof window.console) && (window.console = {"log": function () {}});
   </script>
 
 </body>
