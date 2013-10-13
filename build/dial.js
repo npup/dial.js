@@ -1,7 +1,7 @@
 /**
 *
 * Name: dial.js
-* Version: 0.1
+* Version: 0.2
 * Description: quasi modal alert-, confirm- and prompt dialogs in JavaScript
 * Author: P. Envall (petter.envall@gmail.com, @npup)
 * Date: 2013-10-01
@@ -145,7 +145,8 @@ var dial;
     };
 
   // le basic event abstraction
-  var listen = (function () {
+  var Event = (function () {
+    var listen = (function () {
       return "function" == typeof doc.body.addEventListener ?
         function (elem, name, handler, capture) {
           elem.addEventListener(name, handler, !!capture);
@@ -157,26 +158,38 @@ var dial;
             handler(event);
           });
         };
-    })();
+      })()
+      , prevent = function (e) {
+        if ("preventDefault" in e) {prevent = function (e) {e.preventDefault();};}
+        else {prevent = function (e) {e.returnValue = false;};}
+        prevent(e);
+      };
+
+    return {
+      "listen": listen
+      , "prevent": prevent
+    };
+  })();
+
 
   // handle tabbing out of the dialog
-  listen(doc, "keydown", function (e) {
+  Event.listen(doc, "keydown", function (e) {
     if (e.keyCode != 9 || !settings.currentInputs) {return;}
     var leavingElem = doc.activeElement, refocus;
     if (e.shiftKey) {leavingElem == settings.currentInputs.first && (refocus = settings.currentInputs.last);}
     else {leavingElem == settings.currentInputs.last && (refocus = settings.currentInputs.first);}
-    refocus && (refocus.focus(), e.preventDefault()); // TODO: alternative for preventDefault
+    refocus && (refocus.focus(), Event.prevent(e));
   });
 
   // handle close on pressing ESC
-  listen(doc, "keyup", function (e) {
+  Event.listen(doc, "keyup", function (e) {
       if (e.keyCode == 27 && !settings.noESC) {elems.hide();}
     }, false);
 
   var supportsFocusin = (function () {
       var result = false, a = doc.createElement("a");
       a.href= "#";
-      listen(a, "focusin", function () {result = true;});
+      Event.listen(a, "focusin", function () {result = true;});
       doc.body.appendChild(a);
       a.focus();
       doc.body.removeChild(a);
@@ -192,11 +205,11 @@ var dial;
     }
     settings.currentInputs.first.focus();
   }
-  if (supportsFocusin) {listen(doc, "focusin", preventFocusOutsideDialog);}
-  else {listen(doc, "focus", preventFocusOutsideDialog, true);}
+  if (supportsFocusin) {Event.listen(doc, "focusin", preventFocusOutsideDialog);}
+  else {Event.listen(doc, "focus", preventFocusOutsideDialog, true);}
 
   // handle submitting dialog forms
-  listen(doc, "click", function (e) {
+  Event.listen(doc, "click", function (e) {
       var elem = e.target;
       if (elem===elems.wrap) {return settings.currentInputs.first.focus();} // redirect astray focus
       var submitAttr = e.target.getAttribute("data-dialog-submit");
