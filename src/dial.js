@@ -42,9 +42,9 @@ var dial;
   // build elems and expose show/hide methods
   var elems = (function () {
     var overlay = doc.createElement("div");
-    overlay.className = classNames.OVERLAY//"js-dialog-overlay";
+    overlay.className = classNames.OVERLAY;
     var wrap = doc.createElement("div");
-    wrap.className = classNames.WRAP;//"js-dialog-wrap";
+    wrap.className = classNames.WRAP;
     var content = doc.createElement("div"); // gets classname when populated
     wrap.appendChild(content);
     return {
