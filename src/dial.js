@@ -2,15 +2,16 @@
 *
 * Name: dial.js
 * Version: 0.2
-* Description: quasi modal alert-, confirm- and prompt dialogs in JavaScript
+* Description: quasi modal alert-, confirm-, prompt and message dialogs in JavaScript
 * Author: P. Envall (petter.envall@gmail.com, @npup)
 * Date: 2013-10-01
 *
 *
 * API:
-*   dialog.alert(options[, cb]);
-*   dialog.confirm(options[, cb]);
-*   dialog.prompt(options[, cb]);
+*   dial.alert(options[, cb]);    // callback receives no parameters
+*   dial.msg(options[, cb]);      // callback receives no parameters
+*   dial.confirm(options[, cb]);  // callback receives parameter true/false
+*   dial.prompt(options[, cb]);   // callback receives value submitted (string) or null
 *     options   - (object) options hash:
 *                   heading  - (optional string, default "") dialog (h2) heading text
 *                   msg      - (optional string, default "") dialog message text
@@ -20,6 +21,11 @@
 *                   cssClass - (optional string, default "") extra css class for dialog content element
 *                   noEsc    - (optional boolean, default false) sets if dialog should be dismissed when pressing ESC on keyboard
 *     cb       -  (function) callback, called on close.
+*
+* There is also a short form where "options" is just a string, which is used as if it was
+* passed as options.msg. All other options will be taken from the default settings.
+*
+* dial.msg("You're afraid you can't let me do that!");
 */
 var dial;
 ("undefined" == typeof dial) && (dial = (function () {
@@ -52,27 +58,27 @@ var dial;
       , "wrap": wrap
       , "content": content
       , "show": function (options) {
-        if (settings.active) {return;}
-        doc.body.appendChild(elems.overlay);
-        doc.body.appendChild(elems.wrap);
-        settings.currentInputs = (function () {
-          var list = elems.content.getElementsByTagName("input");
-          return {
-            "first": list[0]
-            , "last": list[list.length-1]
-          };
-        })();
-        settings.noESC = !!options.noESC;
-        settings.active = true;
-      }
+          if (settings.active) {return;}
+          doc.body.appendChild(elems.overlay);
+          doc.body.appendChild(elems.wrap);
+          settings.currentInputs = (function () {
+            var list = elems.content.getElementsByTagName("input");
+            return {
+              "first": list[0]
+              , "last": list[list.length-1]
+            };
+          })();
+          settings.noESC = !!options.noESC;
+          settings.active = true;
+        }
       , "hide": function () {
-        if (!settings.active) {return;}
-        doc.body.removeChild(elems.overlay);
-        doc.body.removeChild(elems.wrap);
-        settings.currentInputs = null;
-        settings.noESC = false;
-        settings.active = false;
-      }
+          if (!settings.active) {return;}
+          doc.body.removeChild(elems.overlay);
+          doc.body.removeChild(elems.wrap);
+          settings.currentInputs = null;
+          settings.noESC = false;
+          settings.active = false;
+        }
     };
   })();
 
@@ -95,36 +101,44 @@ var dial;
       }
     , templates = {
       "alert": [
-        optionalHeading
-        , "  <p>#msg#</p>"
-        , "  <form action=# onsubmit='return false;'>"
-        , "    <input type=submit data-dialog-submit=ok value=#ok# name=submit-ok>"
-        , "  </form>"
-      ].join("")
+          optionalHeading
+          , "  <p>#msg#</p>"
+          , "  <form action=# onsubmit='return false;'>"
+          , "    <input type=submit data-dialog-submit=ok value=#ok# name=submit-ok>"
+          , "  </form>"
+        ].join("")
       , "confirm": [
-        optionalHeading
-        , "  <p>#msg#</p>"
-        , "  <form action=# onsubmit='return false;'>"
-        , "    <input type=submit data-dialog-submit=no value=#no# name=submit-no>"
-        , "    <input type=submit data-dialog-submit=yes value=#yes# name=submit-yes>"
-        , "  </form>"
-      ].join("")
+          optionalHeading
+          , "  <p>#msg#</p>"
+          , "  <form action=# onsubmit='return false;'>"
+          , "    <input type=submit data-dialog-submit=no value=#no# name=submit-no>"
+          , "    <input type=submit data-dialog-submit=yes value=#yes# name=submit-yes>"
+          , "  </form>"
+        ].join("")
       , "prompt": [
-        optionalHeading
-        , "  <p>#msg#</p>"
-        , "  <form action=# onsubmit='return false;'>"
-        , "    <input type=text name=text>"
-        , "    <input type=submit data-dialog-submit=cancel value=#cancel# name=submit-cancel>"
-        , "    <input type=submit data-dialog-submit=ok value=#ok# name=submit-ok>"
-        , "  </form>"
-      ].join("")
+          optionalHeading
+          , "  <p>#msg#</p>"
+          , "  <form action=# onsubmit='return false;'>"
+          , "    <input type=text name=text>"
+          , "    <input type=submit data-dialog-submit=cancel value=#cancel# name=submit-cancel>"
+          , "    <input type=submit data-dialog-submit=ok value=#ok# name=submit-ok>"
+          , "  </form>"
+        ].join("")
+      , "msg": [
+          optionalHeading
+          , "  <p>#msg#</p>"
+          , "  <form action=# onsubmit='return false;'>"
+          , "    <input type=submit data-dialog-submit=ok value=X name=submit-ok>" // can &#x274c; be used quite reliably?
+          , "  </form>"
+        ].join("")
     };
 
   // handlers for submitting/closing the dialogs
   var handlers = {
-    "alert": function (/*form, submitAttr*/) {return [];}
+    "alert": function (/*form, submitAttr*/) {return void 0;}
     , "confirm": function (form, submitAttr) {return ["yes"==submitAttr];}
     , "prompt": function (form, submitAttr) {return ["ok"==submitAttr ? form.elements.text.value : null];}
+    , "msg": function (/*form, submitAttr*/) {return void 0;}
     , "handleClose": function (form, submitAttr) {
         var handlers = this, result;
         settings.dialogReplaced = false;
@@ -211,6 +225,9 @@ var dial;
   // handle submitting dialog forms
   Event.listen(doc, "click", function (e) {
       var elem = e.target;
+      if ("msg" == settings.type && elem === elems.wrap) { // simple msg is closed on click "anywhere"
+        return elems.hide();
+      }
       if (elem===elems.wrap) {return settings.currentInputs.first.focus();} // redirect astray focus
       var submitAttr = e.target.getAttribute("data-dialog-submit");
       if (!submitAttr || !submitTypes.test(submitAttr)) {return;}
@@ -223,6 +240,7 @@ var dial;
   // build and show correct dialog
   function setup(type, options, cb) {
     settings.dialogReplaced = true;
+    settings.type = type;
     elems.hide();
     if ("string" == typeof options) {options = {"msg": options};}
     ("msg" in options) || (options.msg = "");
@@ -237,7 +255,7 @@ var dial;
     handlers.userCallback = cb;
     var form = elems.content.getElementsByTagName("form")[0];
     elems.show(options);
-    focusForm(form, options);
+    form && focusForm(form, options);
     return form;
   }
 
@@ -258,6 +276,9 @@ var dial;
       options.focus || (options.focus = "text");
       var form = setup("prompt", options, cb);
       form.elements.text.value = options.value || "";
+    }
+    , "msg": function (options, cb) {
+      setup("msg", options || {}, cb);
     }
   };
 
