@@ -61,6 +61,30 @@
   margin-top: 0;
 }
 
+.js-dial-msg {
+  position: relative;
+}
+.js-dial-msg > p {
+  margin-bottom: 0;
+}
+.js-dial-msg input[type=submit]
+, .js-dial-msg input[type=submit]:focus {
+  position: absolute;
+  right: -10px;
+  top: -10px;
+  border: 2px solid #444;
+  border-radius: 50%;
+  width: 25px;
+  height: 25px;
+  font-family: Arial;
+  font-size: .8em;
+  letter-spacing: -.1em;
+  color: #f00;
+}
+.js-dial-msg input[type=submit]:hover {
+  border-color: #888;
+}
+
 /* all inputs */
 .js-dial input {
   padding: 3px 5px;
