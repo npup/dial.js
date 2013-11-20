@@ -4,7 +4,7 @@
 * Version: 0.5
 * Description: quasi modal alert-, confirm-, prompt and message dialogs in JavaScript
 * Author: P. Envall (petter.envall@gmail.com, @npup)
-* Date: 2013-10-01
+* Date: 2013-11-20
 *
 *
 * API:
