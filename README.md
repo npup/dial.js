@@ -1,4 +1,4 @@
-dialog.js
+dial.js
 =====
 
-js alert-, confirm- and prompt dialogs. ie7+
+js alert-, confirm-, prompt- and message dialogs. ie8+
