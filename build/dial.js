@@ -22,7 +22,7 @@
 *                   focus    - (optional text) set preselected form elemenf for dialog
 *                               (no/yes for confirm, cancel/ok/text for prompt) defaults are yes and ok (last buttons in each form)
 *                   cssClass - (optional string, default "") extra css class for dialog content element
-*                   noEsc    - (optional boolean, default false) sets if dialog should be dismissed when pressing ESC on keyboard
+*                   noESC    - (optional boolean, default false) sets if dialog should be dismissed when pressing ESC on keyboard
 *
 *     cb       -  (function) callback, called on close.
 *                 The callback receives a dialog status object with the properties "value" and "form"
@@ -134,7 +134,7 @@ var dial;
           , optionalHeading
           , "  <p>#msg#</p>"
           , "  <div class=js-dial-inputs>"
-          , "    <input type=text name=js-dial-text>"
+          , "    <input type=text name=text>"
           , "    <input type=submit data-dial-submit=cancel value=#cancel# name=submit-cancel>"
           , "    <input type=submit data-dial-submit=ok value=#ok# name=submit-ok>"
           , "  </div>"
@@ -155,7 +155,7 @@ var dial;
   var handlers = {
     "alert": function (form/*, submitAttr*/) {return {"form": form};}
     , "confirm": function (form, submitAttr) {return {"form": form, "value": "yes"==submitAttr};}
-    , "prompt": function (form, submitAttr) {return {"form": form, "value": "ok"==submitAttr ? form.elements["js-dial-text"].value : null};}
+    , "prompt": function (form, submitAttr) {return {"form": form, "value": "ok"==submitAttr ? form.elements.text.value : null};}
     , "msg": function (form/*, submitAttr*/) {return {"form": form};}
     , "handleClose": function (form, submitAttr) {
         var handlers = this, result;
@@ -280,7 +280,7 @@ var dial;
   function focusForm(form, options) {
     var formElems = form.elements;
     if (submitTypes.test(options.focus)) {formElems["submit-"+options.focus].focus();}
-    else if ("js-dial-text" == options.focus) {formElems[options.focus] && formElems[options.focus].select();}
+    else if ("text" == options.focus) {formElems[options.focus] && formElems[options.focus].select();}
     else {formElems[formElems.length-1].focus();}
   }
 
@@ -290,9 +290,9 @@ var dial;
     , "confirm": function (options, cb) {setup("confirm", options || {}, cb);}
     , "prompt": function (options, cb) {
       options || (options = {});
-      options.focus || (options.focus = "js-dial-text");
+      options.focus || (options.focus = "text");
       var form = setup("prompt", options, cb);
-      form.elements["js-dial-text"].value = options.value || "";
+      form.elements.text.value = options.value || "";
     }
     , "msg": function (options, cb) {
       setup("msg", options || {}, cb);
