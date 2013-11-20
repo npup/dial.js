@@ -32,6 +32,7 @@
       overflow: auto;
       font-size: .8em;
       border: 2px solid #e8e8e8;
+      white-space: pre-wrap;
     }
 
     button + p {
@@ -82,44 +83,55 @@
       note
     </button>
     <p>
-      Basic alert.
+      Basic alert, sending text right in as first argument.
     </p>
-    <script class="example">
-      // dial.alert("Thin ice!");
+    <script type="text/example" class="example">
+dial.alert("Thin ice!");
     </script>
 
     <button onclick='dial.alert({"heading": "Yo man", "msg": "VERY thin ice!", "cssClass": "warning", "noESC": true});' class="example">
       another note
     </button>
     <p>
-      Alert with additional heading, custom extra CSS class and no closing by pressing <strong>ESC</strong> key.
+      Alert with additional heading, custom extra CSS class and no closing by pressing <strong>ESC</strong> key. The text content is passed within the configuration object as <em>heading</em> and <em>msg</em>.
     </p>
-    <script class="example">
-      // dial.alert({"heading": "Yo man", "msg": "VERY thin ice!", "cssClass": "warning", "noESC": true});
+    <script type="text/example" class="example">
+dial.alert({
+    "heading": "Yo man"
+    , "msg": "VERY thin ice!"
+    , "cssClass": "warning"
+    , "noESC": true
+  }
+);
     </script>
 
-      <h3>msg</h3>
-      <button onclick='dial.msg("Fee fi fo fum");'>
-          A simple msg
-      </button>
-      <p>
-        A simple message
-      </p>
-      <script class="example">
-        // dial.msg("Fee fi fo fum");
-      </script>
+    <h3>msg</h3>
+    <button onclick='dial.msg("Fee fi fo fum");'>
+        Just a simple msg
+    </button>
+    <p>
+      Just a simple message. Text (HTML) passed in as the first argument again.
+    </p>
+    <script type="text/example" class="example">
+dial.msg("Fee fi fo fum");
+    </script>
 
 
 
     <h3>confirm</h3>
-    <button onclick='dial.confirm({"msg": "Going bananas?<p>Is that really so?</p>"}, function (status) {status.value && dial.alert("Vaya con bananas!");});'>
+    <button onclick='dial.confirm("Going bananas?<p>Is that really so?</p>", function (status) {status.value && dial.alert("Vaya con bananas!");});'>
       mental state
     </button>
     <p>
-      Basic confirm dialog with a handler for the answer (which is true/false).
+      Basic confirm dialog with a handler for the answer (which is <em>true</em>/<em>false</em>). Text sent right in again, since no other configuration is <used class=""></used>
     </p>
-    <script class="example">
-      // dial.confirm({"msg": "Going bananas?<p>Is that really so?</p>"}, function (status) {status.value && dial.alert("Vaya con bananas!");});
+    <script type="text/example" class="example">
+dial.confirm(
+  "Going bananas?<p>Is that really so?</p>"
+  , function (status) {
+    status.value && dial.alert("Vaya con bananas!");
+  }
+);
     </script>
 
 
@@ -130,8 +142,15 @@
      <p>
       Confirm dialog with default focus set to &quot;no&quot; alternative, and a handler for the answer (which is true/false).
     </p>
-    <script class="example">
-      // dial.confirm({"msg": "Going to San Francisco?<p>Will you be wearing some flowers in your hair?</p>", "focus": "no"}, function (status) {status.value || dial.alert("Ok then :(");});
+    <script type="text/example" class="example">
+dial.confirm({
+    "msg": "Going to San Francisco?<p>Will you be wearing some flowers in your hair?</p>"
+    , "focus": "no"
+  }
+  , function (status) {
+    status.value || dial.alert("Ok then :(");
+  }
+);
     </script>
 
 
@@ -142,8 +161,14 @@
     <p>
       Prompt dialog with a handler for the answer (which is null, or whatever was entered in the text field).
     </p>
-    <script class="example">
-      // dial.prompt({"msg": "Shoe size?"}, function (status) {console.log(status.value);});
+    <script type="text/example" class="example">
+dial.prompt({
+    "msg": "Shoe size?"
+  }
+  , function (status) {
+    console.log(status.value);
+  }
+);
     </script>
     <button onclick='dial.prompt({"msg": "Yer name?", "value": "Don Martin", "focus": "ok"}, function (status) {console.log(status.value); if (!status.value) {return false;}});'>
       Who goes there? (mandatory)
@@ -151,8 +176,17 @@
     <p>
       Prompt dialog with a handler for the answer that prevents closing the dialog on null (<strong>cancel</strong>) or empty string as answer.
     </p>
-    <script class="example">
-      // dial.prompt({"msg": "Yer name?" "value": "Don Martin", "focus": "ok",}, function (status) {console.log(status.value); if (!status.value) {return false;}});
+    <script type="text/example" class="example">
+dial.prompt({
+    "msg": "Yer name?"
+    , "value": "Don Martin"
+    , "focus": "ok"
+  }
+  , function (status) {
+    console.log(status.value);
+    if (!status.value) {return false;}
+  }
+);
     </script>
 
   </div>
