@@ -1,31 +1,41 @@
 /**
 *
 * Name: dial.js
-* Version: 0.3
+* Version: 0.5
 * Description: quasi modal alert-, confirm-, prompt and message dialogs in JavaScript
 * Author: P. Envall (petter.envall@gmail.com, @npup)
 * Date: 2013-10-01
 *
 *
 * API:
-*   dial.alert(options[, cb]);    // callback receives no parameters
-*   dial.msg(options[, cb]);      // callback receives no parameters
-*   dial.confirm(options[, cb]);  // callback receives parameter true/false
-*   dial.prompt(options[, cb]);   // callback receives value submitted (string) or null
+*   dial.alert(options[, cb]);
+*   dial.msg(options[, cb]);
+*   dial.confirm(options[, cb]);
+*   dial.prompt(options[, cb]);
+*
+* Arguments:
+*
 *     options   - (object) options hash:
-*                   heading  - (optional string, default "") dialog (h2) heading text
-*                   msg      - (optional string, default "") dialog message text
+*                   heading  - (optional string, default "") dialog heading text
+*                   msg      - (optional string, default "") dialog message HTML text
 *                   value    - (optional string, default "") default value (prompt dialog only)
 *                   focus    - (optional text) set preselected form elemenf for dialog
 *                               (no/yes for confirm, cancel/ok/text for prompt) defaults are yes and ok (last buttons in each form)
 *                   cssClass - (optional string, default "") extra css class for dialog content element
 *                   noEsc    - (optional boolean, default false) sets if dialog should be dismissed when pressing ESC on keyboard
+*
 *     cb       -  (function) callback, called on close.
+*                 The callback receives a dialog status object with the properties "value" and "form"
 *
-* There is also a short form where "options" is just a string, which is used as if it was
-* passed as options.msg. All other options will be taken from the default settings.
 *
-* dial.msg("You're afraid you can't let me do that!");
+* There is also a short form where "options" is just an HTML string,
+* which is used as if it was passed as options.msg.
+* All other options will be taken from the default settings.
+*
+*   Example:
+*     dial.msg("You're afraid you can't let me do that!");
+*     dial.confirm("I will call you Mr. Maybe", function (status) { console.log(status.value); });
+*
 */
 var dial;
 ("undefined" == typeof dial) && (dial = (function () {
@@ -101,50 +111,58 @@ var dial;
       }
     , templates = {
       "alert": [
-          optionalHeading
+          "  <form action=# onsubmit='return false;'>"
+          , optionalHeading
           , "  <p>#msg#</p>"
-          , "  <form action=# onsubmit='return false;'>"
-          , "    <input type=submit data-dialog-submit=ok value=#ok# name=submit-ok>"
+          , "  <div class=js-dial-inputs>"
+          , "    <input type=submit data-dial-submit=ok value=#ok# name=submit-ok>"
+          , "  </div>"
           , "  </form>"
         ].join("")
       , "confirm": [
-          optionalHeading
+          "  <form action=# onsubmit='return false;'>"
+          , optionalHeading
           , "  <p>#msg#</p>"
-          , "  <form action=# onsubmit='return false;'>"
-          , "    <input type=submit data-dialog-submit=no value=#no# name=submit-no>"
-          , "    <input type=submit data-dialog-submit=yes value=#yes# name=submit-yes>"
+          , "  <div class=js-dial-inputs>"
+          , "    <input type=submit data-dial-submit=no value=#no# name=submit-no>"
+          , "    <input type=submit data-dial-submit=yes value=#yes# name=submit-yes>"
+          , "  </div>"
           , "  </form>"
         ].join("")
       , "prompt": [
-          optionalHeading
+          "  <form action=# onsubmit='return false;'>"
+          , optionalHeading
           , "  <p>#msg#</p>"
-          , "  <form action=# onsubmit='return false;'>"
-          , "    <input type=text name=text>"
-          , "    <input type=submit data-dialog-submit=cancel value=#cancel# name=submit-cancel>"
-          , "    <input type=submit data-dialog-submit=ok value=#ok# name=submit-ok>"
+          , "  <div class=js-dial-inputs>"
+          , "    <input type=text name=js-dial-text>"
+          , "    <input type=submit data-dial-submit=cancel value=#cancel# name=submit-cancel>"
+          , "    <input type=submit data-dial-submit=ok value=#ok# name=submit-ok>"
+          , "  </div>"
           , "  </form>"
         ].join("")
       , "msg": [
-          optionalHeading
-          , "  <p>#msg#</p>"
           , "  <form action=# onsubmit='return false;'>"
-          , "    <input type=submit data-dialog-submit=ok value=X name=submit-ok>" // can &#x274c; be used quite reliably?
+          , optionalHeading
+          , "  <p>#msg#</p>"
+          , "  <div class=js-dial-inputs>"
+          , "    <input type=submit data-dial-submit=ok value=X name=submit-ok>" // can &#x274c; be used quite reliably?
+          , "  </div>"
           , "  </form>"
         ].join("")
     };
 
   // handlers for submitting/closing the dialogs
   var handlers = {
-    "alert": function (/*form, submitAttr*/) {return void 0;}
-    , "confirm": function (form, submitAttr) {return ["yes"==submitAttr];}
-    , "prompt": function (form, submitAttr) {return ["ok"==submitAttr ? form.elements.text.value : null];}
-    , "msg": function (/*form, submitAttr*/) {return void 0;}
+    "alert": function (form/*, submitAttr*/) {return {"form": form};}
+    , "confirm": function (form, submitAttr) {return {"form": form, "value": "yes"==submitAttr};}
+    , "prompt": function (form, submitAttr) {return {"form": form, "value": "ok"==submitAttr ? form.elements["js-dial-text"].value : null};}
+    , "msg": function (form/*, submitAttr*/) {return {"form": form};}
     , "handleClose": function (form, submitAttr) {
         var handlers = this, result;
         settings.dialogReplaced = false;
         if (handlers.userCallback) {
-          var args = handlers[handlers.type](form, submitAttr);
-          result = handlers.userCallback.apply(null, args);
+          var arg = handlers[handlers.type](form, submitAttr);
+          result = handlers.userCallback.call(null, arg);
           if (settings.dialogReplaced) {
             // If another dialog was opened it will have replaced the previous,
             // and we should not close the new one (or destroy the new callback)
@@ -225,15 +243,14 @@ var dial;
   // handle submitting dialog forms
   Event.listen(doc, "click", function (e) {
       var elem = e.target;
-      if ("msg" == settings.type && elem === elems.wrap) { // simple msg is closed on click "anywhere"
+      if ("msg" == settings.type && elem === elems.wrap) { // simple msg is closed on click "anywhere outside"
         return elems.hide();
       }
       if (elem===elems.wrap) {return settings.currentInputs.first.focus();} // redirect astray focus
-      var submitAttr = e.target.getAttribute("data-dialog-submit");
+      var submitAttr = e.target.getAttribute("data-dial-submit");
       if (!submitAttr || !submitTypes.test(submitAttr)) {return;}
       // Firefox does not seem to give submit buttons focus onclick
-      if (handlers.handleClose(elem.form, submitAttr)===false) {elem.focus();}
-      // literal false means do not close
+      if (handlers.handleClose(elem.form, submitAttr)===false) {elem.focus();} // literal false means do not close
       else {elems.hide();}
     }, false);
 
@@ -263,7 +280,7 @@ var dial;
   function focusForm(form, options) {
     var formElems = form.elements;
     if (submitTypes.test(options.focus)) {formElems["submit-"+options.focus].focus();}
-    else if ("text" == options.focus) {formElems[options.focus] && formElems[options.focus].select();}
+    else if ("js-dial-text" == options.focus) {formElems[options.focus] && formElems[options.focus].select();}
     else {formElems[formElems.length-1].focus();}
   }
 
@@ -273,9 +290,9 @@ var dial;
     , "confirm": function (options, cb) {setup("confirm", options || {}, cb);}
     , "prompt": function (options, cb) {
       options || (options = {});
-      options.focus || (options.focus = "text");
+      options.focus || (options.focus = "js-dial-text");
       var form = setup("prompt", options, cb);
-      form.elements.text.value = options.value || "";
+      form.elements["js-dial-text"].value = options.value || "";
     }
     , "msg": function (options, cb) {
       setup("msg", options || {}, cb);

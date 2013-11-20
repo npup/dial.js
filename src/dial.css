@@ -57,18 +57,18 @@
   box-shadow: .5em .5em 1em #000;
 }
 
-.js-dial > *:first-child {
+.js-dial form *:first-child {
   margin-top: 0;
 }
 
 .js-dial-msg {
   position: relative;
 }
-.js-dial-msg > p {
+.js-dial-msg form > p {
   margin-bottom: 0;
 }
-.js-dial-msg input[type=submit]
-, .js-dial-msg input[type=submit]:focus {
+.js-dial-msg  .js-dial-inputs input[type=submit]
+, .js-dial-msg  .js-dial-inputs input[type=submit]:focus {
   position: absolute;
   right: -10px;
   top: -10px;
@@ -81,12 +81,12 @@
   letter-spacing: -.1em;
   color: #f00;
 }
-.js-dial-msg input[type=submit]:hover {
+.js-dial-msg  .js-dial-inputs input[type=submit]:hover {
   border-color: #888;
 }
 
-/* all inputs */
-.js-dial input {
+/* all widget's standard inputs */
+.js-dial-inputs input {
   padding: 3px 5px;
   background-color: #f0f0f0;
   border: 1px solid #999;
@@ -96,26 +96,26 @@
   height: 2.5em;
   border-radius: 3px;
 }
-.js-dial input:focus {
+.js-dial-inputs input:focus {
   border-color: #ea3;
   border-width: 2px;
   outline: 0;
 }
-.js-dial input[type=submit] {
+.js-dial-inputs input[type=submit] {
   background-color: #fff;
 }
 
 
 /* prompt-dialog */
-.js-dial-prompt input[type="text"] {
+.js-dial-prompt .js-dial-inputs input[type="text"] {
   display: block;
 }
-.js-dial-confirm input[type=submit]
-, .js-dial-prompt input[type=submit] {
+.js-dial-confirm  .js-dial-inputs input[type=submit]
+, .js-dial-prompt  .js-dial-inputs input[type=submit] {
   width: 49%;
 }
 
 
 .js-dial-alert {
-  min-width: 200px;
+  min-width: 13em;
 }

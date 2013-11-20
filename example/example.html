@@ -112,47 +112,47 @@
 
 
     <h3>confirm</h3>
-    <button onclick='dial.confirm({"msg": "Going bananas?<p>Is that really so?</p>"}, function (bananas) {bananas && dial.alert("Vaya con bananas!");});'>
+    <button onclick='dial.confirm({"msg": "Going bananas?<p>Is that really so?</p>"}, function (status) {status.value && dial.alert("Vaya con bananas!");});'>
       mental state
     </button>
     <p>
       Basic confirm dialog with a handler for the answer (which is true/false).
     </p>
     <script class="example">
-      // dial.confirm({"msg": "Going bananas?<p>Is that really so?</p>"}, function (bananas) {bananas && dial.alert("Vaya con bananas!");});
+      // dial.confirm({"msg": "Going bananas?<p>Is that really so?</p>"}, function (status) {status.value && dial.alert("Vaya con bananas!");});
     </script>
 
 
     <button
-      onclick='dial.confirm({"msg": "Going to San Francisco?<p>Will you be wearing some flowers in your hair?</p>", "focus": "no"}, function (flowers) {flowers || dial.alert("Ok then :(");});'>
+      onclick='dial.confirm({"msg": "Going to San Francisco?<p>Will you be wearing some flowers in your hair?</p>", "focus": "no"}, function (status) {status.value || dial.alert("Ok then :(");});'>
       dresscode
     </button>
      <p>
       Confirm dialog with default focus set to &quot;no&quot; alternative, and a handler for the answer (which is true/false).
     </p>
     <script class="example">
-      // dial.confirm({"msg": "Going to San Francisco?<p>Will you be wearing some flowers in your hair?</p>", "focus": "no"}, function (flowers) {flowers || dial.alert("Ok then :(");});
+      // dial.confirm({"msg": "Going to San Francisco?<p>Will you be wearing some flowers in your hair?</p>", "focus": "no"}, function (status) {status.value || dial.alert("Ok then :(");});
     </script>
 
 
     <h3>prompt</h3>
-    <button onclick='dial.prompt({"msg": "Shoe size?"}, function (a) {console.log(a);});'>
+    <button onclick='dial.prompt({"msg": "Shoe size?"}, function (status) {console.log(status.value);});'>
       Shoe size?
     </button>
     <p>
       Prompt dialog with a handler for the answer (which is null, or whatever was entered in the text field).
     </p>
     <script class="example">
-      // dial.prompt({"msg": "Shoe size?"}, function (a) {console.log(a);});
+      // dial.prompt({"msg": "Shoe size?"}, function (status) {console.log(status.value);});
     </script>
-    <button onclick='dial.prompt({"msg": "Yer name?", "value": "Don Martin", "focus": "ok"}, function (name) {console.log(name); if (!name) {return false;}});'>
+    <button onclick='dial.prompt({"msg": "Yer name?", "value": "Don Martin", "focus": "ok"}, function (status) {console.log(status.value); if (!status.value) {return false;}});'>
       Who goes there? (mandatory)
     </button>
     <p>
       Prompt dialog with a handler for the answer that prevents closing the dialog on null (<strong>cancel</strong>) or empty string as answer.
     </p>
     <script class="example">
-      // dial.prompt({"msg": "Yer name?" "value": "Don Martin", "focus": "ok",}, function (name) {console.log(name); if (!name) {return false;}});
+      // dial.prompt({"msg": "Yer name?" "value": "Don Martin", "focus": "ok",}, function (status) {console.log(status.value); if (!status.value) {return false;}});
     </script>
 
   </div>
@@ -161,7 +161,6 @@
   <script>
     ("undefined" == typeof window.console) && (window.console = {"log": function () {}});
   </script>
-
 
 </body>
 </html>
