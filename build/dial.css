@@ -25,6 +25,11 @@
   display: inline-block;
   vertical-align: middle;
 }
+.js-dial, .js-dial * {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
 
 
 /* appearance */
@@ -48,7 +53,7 @@
 .js-dial {
   font-family: Verdana, Arial, Sans-serif;
   text-align: left;
-  min-width: 22em;
+  min-width: 300px;
   max-width: 80%;
   padding: 1em;
   border: 2px solid #999;
@@ -112,10 +117,10 @@
 }
 .js-dial-confirm  .js-dial-inputs input[type=submit]
 , .js-dial-prompt  .js-dial-inputs input[type=submit] {
-  width: 49%;
+  width: 47%;
 }
 
 
 .js-dial-alert {
-  min-width: 13em;
+  min-width: 200px;
 }
