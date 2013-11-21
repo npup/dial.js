@@ -1,7 +1,7 @@
 /**
 *
 * Name: dial.js
-* Version: 0.5.1
+* Version: 0.6
 * Description: quasi modal alert-, confirm-, prompt and message dialogs in JavaScript
 * Author: P. Envall (petter.envall@gmail.com, @npup)
 * Date: 2013-11-20
