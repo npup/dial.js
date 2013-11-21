@@ -1,7 +1,7 @@
 /**
 *
 * Name: dial.js
-* Version: 0.5
+* Version: 0.6
 * Description: quasi modal alert-, confirm-, prompt and message dialogs in JavaScript
 * Author: P. Envall (petter.envall@gmail.com, @npup)
 * Date: 2013-11-20
@@ -162,7 +162,7 @@ var dial;
         settings.dialogReplaced = false;
         if (handlers.userCallback) {
           var arg = handlers[handlers.type](form, submitAttr);
-          result = handlers.userCallback.call(null, arg);
+          result = handlers.userCallback(arg);
           if (settings.dialogReplaced) {
             // If another dialog was opened it will have replaced the previous,
             // and we should not close the new one (or destroy the new callback)
