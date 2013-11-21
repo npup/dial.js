@@ -1,7 +1,7 @@
 /**
 *
 * Name: dial.js
-* Version: 0.6
+* Version: 0.6.1
 * Description: quasi modal alert-, confirm-, prompt and message dialogs in JavaScript
 * Author: P. Envall (petter.envall@gmail.com, @npup)
 * Date: 2013-11-20
@@ -52,8 +52,11 @@ var dial;
       , "forContent": function (type) {
         return [prefix, prefix+"-"+type].join(" ");
       }
+      , "HIDE": [prefix, "hide"].join("-")
     };
   })();
+
+  var hideExpr = new RegExp("^(.*)"+classNames.HIDE+"(.*)$");
 
   // build elems and expose show/hide methods
   var elems = (function () {
@@ -67,8 +70,12 @@ var dial;
       "overlay": overlay
       , "wrap": wrap
       , "content": content
-      , "show": function (options) {
+      , "show": function (options, wasActive) {
           if (settings.active) {return;}
+          if (!wasActive) {
+            overlay.className += classNames.HIDE;
+            content.className += classNames.HIDE;
+          }
           doc.body.appendChild(elems.overlay);
           doc.body.appendChild(elems.wrap);
           settings.currentInputs = (function () {
@@ -80,6 +87,14 @@ var dial;
           })();
           settings.noESC = !!options.noESC;
           settings.active = true;
+          if (!wasActive) {
+            setTimeout(function () {
+                overlay.className = overlay.className.replace(hideExpr, "$1 $2");
+                content.className = content.className.replace(hideExpr, "$1 $2");
+              }
+              , 0
+            );
+          }
         }
       , "hide": function () {
           if (!settings.active) {return;}
@@ -258,6 +273,7 @@ var dial;
   function setup(type, options, cb) {
     settings.dialogReplaced = true;
     settings.type = type;
+    var wasActive = settings.active;
     elems.hide();
     if ("string" == typeof options) {options = {"msg": options};}
     ("msg" in options) || (options.msg = "");
@@ -271,7 +287,7 @@ var dial;
     handlers.type = type;
     handlers.userCallback = cb;
     var form = elems.content.getElementsByTagName("form")[0];
-    elems.show(options);
+    elems.show(options, wasActive);
     form && focusForm(form, options);
     return form;
   }
