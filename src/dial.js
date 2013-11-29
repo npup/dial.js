@@ -233,14 +233,16 @@ var dial;
       if (e.keyCode == 27 && !settings.noESC) {elems.hide();}
     }, false);
 
-  var supportsFocusin = (function () {
-      var result = false, a = doc.createElement("a");
+  var supportsFocusin = false;
+  (function () {
+      var a = doc.createElement("a");
       a.href= "#";
-      Event.listen(a, "focusin", function () {result = true;});
+      a.style.position = "fixed";
+      Event.listen(a, "focusin", function () {supportsFocusin = true;});
       doc.body.appendChild(a);
       a.focus();
-      doc.body.removeChild(a);
-      return result;
+      a.parentNode.removeChild(a);
+      a = null;
     })();
 
   function preventFocusOutsideDialog(e) {
