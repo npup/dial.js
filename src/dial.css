@@ -96,9 +96,10 @@ div.js-dial-hide {
   font-family: Arial;
   font-size: .8em;
   letter-spacing: -.1em;
-  color: #f00;
+  color: #d00;
 }
-.js-dial-msg  .js-dial-inputs input[type=submit]:hover {
+.js-dial-msg  .js-dial-inputs input[type=submit]:hover
+, .js-dial-msg  .js-dial-inputs input[type=submit]:focus {
   border-color: #888;
 }
 
@@ -120,6 +121,11 @@ div.js-dial-hide {
 }
 .js-dial-inputs input[type=submit] {
   background-color: #fff;
+}
+
+.js-dial-inputs input[type="submit"]::-moz-focus-inner {
+  outline: 0;
+  border: 0;
 }
 
 

@@ -41,7 +41,6 @@ var dial;
 ("undefined" == typeof dial) && (dial = (function () {
 
   var global = this, doc = global.document;
-
   var classNames = (function () {
     var prefix = "js-dial";
     return {
@@ -156,7 +155,7 @@ var dial;
           , "  </form>"
         ].join("")
       , "msg": [
-          , "  <form action=# onsubmit='return false;'>"
+          "  <form action=# onsubmit='return false;'>"
           , optionalHeading
           , "  <p>#msg#</p>"
           , "  <div class=js-dial-inputs>"
@@ -261,9 +260,9 @@ var dial;
   Event.listen(doc, "click", function (e) {
       var elem = e.target;
       if ("msg" == settings.type && elem === elems.wrap) { // simple msg is closed on click "anywhere outside"
-        return elems.hide();
+        elems.hide(); return;
       }
-      if (elem===elems.wrap) {return settings.currentInputs.first.focus();} // redirect astray focus
+      if (elem===elems.wrap) {settings.currentInputs.first.focus(); return;} // redirect astray focus
       var submitAttr = e.target.getAttribute("data-dial-submit");
       if (!submitAttr || !submitTypes.test(submitAttr)) {return;}
       // Firefox does not seem to give submit buttons focus onclick
@@ -318,3 +317,14 @@ var dial;
   };
 
 }()));
+
+var module, require, exports;
+(function () {
+  var toExport = {"dial": dial};
+  (function() {
+    var undefinedType = "undefined";
+    if (undefinedType!=typeof module && undefinedType != typeof module.exports && "function" == typeof require) {
+      for (var name in this) {exports[name] = this[name];}
+    }
+  }.call(toExport));
+})();

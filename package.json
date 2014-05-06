@@ -1,0 +1,10 @@
+{
+  "name": "pp-attendance-event-attendance",
+  "description": "js/css alert-, confirm-, prompt- and message dialogs",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "eslint": "0.5.*"
+    , "uglify-js": "2.4.*"
+  }
+}
